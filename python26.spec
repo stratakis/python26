@@ -1004,7 +1004,6 @@ sed -i "s|^#\! */usr/bin.*$|#\! %{__python}|" \
 sed -i -e '1i#\! %{__python}' %{buildroot}%{demo_dir}/scripts/find-uname.py
 
 # Do bytecompilation with the newly installed interpreter.
-# This is similar to the script in macros.pybytecompile
 # compile *.pyo
 find %{buildroot} -type f -a -name "*.py" -print0 | \
     LD_LIBRARY_PATH="%{buildroot}%{dynload_dir}/:%{buildroot}%{_libdir}" \
@@ -1014,7 +1013,7 @@ find %{buildroot} -type f -a -name "*.py" -print0 | \
 find %{buildroot} -type f -a -name "*.py" -print0 | \
     LD_LIBRARY_PATH="%{buildroot}%{dynload_dir}/:%{buildroot}%{_libdir}" \
     PYTHONPATH="%{buildroot}%{_libdir}/python%{pybasever} %{buildroot}%{_libdir}/python%{pybasever}/site-packages" \
-    xargs -0 %{buildroot}%{_bindir}/python%{pybasever} -O -c 'import py_compile, sys; [py_compile.compile(f, dfile=f.partition("%{buildroot}")[2], optimize=0) for f in sys.argv[1:]]' || :
+    xargs -0 %{buildroot}%{_bindir}/python%{pybasever} -c 'import py_compile, sys; [py_compile.compile(f, dfile=f.partition("%{buildroot}")[2]) for f in sys.argv[1:]]' || :
 
 # Make library-files user writable
 # rhbz#1046276
