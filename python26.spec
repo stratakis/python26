@@ -503,6 +503,11 @@ Patch212: 00212-fix-test-pyexpat-failure.patch
 # Skip db related tests
 Patch186: python26-skip-db-tests.patch
 
+# Force all child threads to terminate in TestForkInThread, so no zombie
+# processes get left behind with stalled threads which hang Python builds
+# https://bugs.python.org/issue26456
+Patch230: 00230-force-all-child-threads-to-terminate-in-TestForkInThread.patch
+
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires: readline-devel, openssl-devel, gmp-devel
 BuildRequires: ncurses-devel, gdbm-devel, zlib-devel
@@ -730,6 +735,8 @@ mv Modules/cryptmodule.c Modules/_cryptmodule.c
 %patch186 -p1
 
 %patch212 -p1
+
+%patch230 -p1
 
 # Don't build these crypto algorithms; instead rely on _hashlib and OpenSSL:
 for f in md5module.c md5.c shamodule.c sha256module.c sha512module.c; do
