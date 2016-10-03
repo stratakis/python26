@@ -62,7 +62,7 @@
 Summary: Version %{pybasever} of the Python programming language
 Name: %{python}
 Version: 2.6.9
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: Python
 Group: Development/Languages
 Source: http://www.python.org/ftp/python/%{version}/Python-%{version}.tar.xz
@@ -999,7 +999,7 @@ cp %{SOURCE8} %{buildroot}%{site_packages}
 
 #                                                                                                   
 # Fix shebangs in files listed in rhbz#521898                                                       
-sed -i "s|^#\! */usr/bin.*$|#\! %{__python}|" \
+sed -i "s|^#\! */usr/bin.*$|#\!%{_bindir}/%{python}|" \
     %{buildroot}%{_bindir}/pygettext%{pybasever}.py \
     %{buildroot}%{_bindir}/msgfmt%{pybasever}.py \
     %{buildroot}%{_bindir}/smtpd%{pybasever}.py \
@@ -1094,6 +1094,9 @@ rm -fr $RPM_BUILD_ROOT
 %endif
 
 %changelog
+* Mon Oct 03 2016 Miro Hrončok <mhroncok@redhat.com> - 2.6.9-2
+- Do not create /usr/bin/python shebangs
+
 * Tue Sep 06 2016 Miro Hrončok <mhroncok@redhat.com> - 2.6.9-1
 - Import from CentOS 6
 - Update to 2.6.9
