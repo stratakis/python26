@@ -62,7 +62,7 @@
 Summary: Version %{pybasever} of the Python programming language
 Name: %{python}
 Version: 2.6.9
-Release: 2%{?dist}
+Release: 3%{?dist}
 License: Python
 Group: Development/Languages
 Source: http://www.python.org/ftp/python/%{version}/Python-%{version}.tar.xz
@@ -531,8 +531,6 @@ BuildRequires: systemtap-sdt-devel
 %global tapsetdir      /usr/share/systemtap/tapset
 %endif
 
-# Something in the make uses /usr/bin/python
-BuildRequires: python2
 
 # We don't want to provide this
 # No package in Fedora shall ever depend on this
@@ -568,6 +566,9 @@ done
 
 #   Remove embedded copy of zlib:
 rm -r Modules/zlib || exit 1
+
+# Workaround fix for BuildRequires: python2
+touch Include/Python-ast.h Python/Python-ast.c
 
 #
 # Apply patches:
@@ -1094,6 +1095,9 @@ rm -fr $RPM_BUILD_ROOT
 %endif
 
 %changelog
+* Tue Oct 04 2016 Charalampos Stratakis <cstratak@redhat.com> - 2.6.9-3
+- Workaround fix so the package does not BuildRequires python2
+
 * Mon Oct 03 2016 Miro Hrončok <mhroncok@redhat.com> - 2.6.9-2
 - Do not create /usr/bin/python shebangs
 
